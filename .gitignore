@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Compilation Artifacts
+dist/
+build/
+*.js     # if all JS files are compiled output
+*.map
+
+# Environment Files
+.env
+.env.local
+.env.*.local
+
+# Testing/Coverage
+coverage/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Editor/OS Files
+.vscode/
+.cache/
+.DS_Store
+Thumbs.db
