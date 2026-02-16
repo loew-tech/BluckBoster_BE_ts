@@ -143,6 +143,27 @@ export class DynamoMovieRepo {
     return this.updateInventory(movie, -1);
   }
 
+  async getTrivia(movieID: string) {
+    if (!movieID) throw new Error("movieID cannot be empty");
+
+    let projection = "#i, trivia";
+    const attrNames: Record<string, string> = { "#i": "id" };
+
+    const result = await this.client.send(
+      new GetCommand({
+        TableName: MOVIE_TABLE,
+        Key: { id: movieID },
+        ProjectionExpression: projection,
+        ExpressionAttributeNames: attrNames,
+      }),
+    );
+
+    if (!result.Item) {
+      throw new Error("movie not found");
+    }
+    return result.Item as { trivia: string };
+  }
+
   private async updateInventory(movie: Movie, delta: number): Promise<boolean> {
     // We use the movie.id from your interface (which matches 'id' in DB)
     await this.client.send(

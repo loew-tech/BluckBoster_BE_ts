@@ -46,3 +46,12 @@ export const getMovieMetrics = async (
   const metrics = await movieRepo.getMovieMetrics(id);
   return res.status(StatusCodes.OK).json(metrics);
 };
+
+export const getTrivia = async (
+  req: GetMovieRequest,
+  res: Response<{ trivia: string } | { error: string }>,
+) => {
+  const { id } = req.params;
+  const trivia = await movieRepo.getTrivia(id);
+  return res.status(StatusCodes.OK).json(trivia);
+};
