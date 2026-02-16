@@ -1,9 +1,11 @@
 import { Router } from "express";
 
-import handler, { MovieHandler } from "../handlers/movies.js";
+import * as handler from "../handlers/movies.js";
 
 const router = Router();
 
 router.get("/", handler.getMoviesByPage);
+router.get("/:id", handler.getMovieByID);
+router.get("/:id/metrics", handler.getMovieMetrics);
 
 export default router;

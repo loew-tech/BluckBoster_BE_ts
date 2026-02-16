@@ -23,10 +23,11 @@ export interface Movie {
   rating?: string;
   review?: string;
   synopsis?: string;
-  metrics?: MovieMetrics;
+  mets?: MovieMetrics;
   trivia?: string;
   year?: string;
   centroid?: number;
+  paginate_key?: string;
 }
 
 export interface MovieTrivia {
@@ -34,7 +35,6 @@ export interface MovieTrivia {
 }
 
 export interface MovieMetrics {
-  id?: number;
   acting: number;
   action: number;
   cinematography: number;

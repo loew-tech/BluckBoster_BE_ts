@@ -63,7 +63,8 @@ export class DynamoMovieRepo {
     if (!forCart) {
       // Note the snake_case here to match your DB keys
       projection +=
-        ", cast, director, rented, rating, review, synopsis, trivia, #y";
+        ", #c, director, rented, rating, review, synopsis, trivia, #y";
+      attrNames["#c"] = "cast";
       attrNames["#y"] = "year";
     }
     const result = await this.client.send(
@@ -103,21 +104,35 @@ export class DynamoMovieRepo {
   }
 
   async getMovieMetrics(movieID: string): Promise<MovieMetrics> {
+    console.log("movieID", movieID);
     if (!movieID) throw new Error("movieID cannot be empty");
 
     const result = await this.client.send(
       new GetCommand({
         TableName: MOVIE_TABLE,
-        Key: { id: movieID },
-        ProjectionExpression: "metrics",
+        Key: {
+          id: movieID,
+        },
+        ProjectionExpression: "#m",
+        ExpressionAttributeNames: {
+          "#m": "mets",
+        },
       }),
     );
 
-    if (!result.Item?.metrics) {
-      throw new Error("metrics attribute not found");
+    if (!result.Item) {
+      throw new Error(
+        `Movie with ID '${movieID}' not found in table '${MOVIE_TABLE}'`,
+      );
     }
 
-    return result.Item.metrics as MovieMetrics;
+    const metrics = result.Item.mets as MovieMetrics;
+
+    if (!metrics) {
+      throw new Error(`The 'mets' attribute is missing for movie: ${movieID}`);
+    }
+
+    return metrics;
   }
 
   async rent(movie: Movie): Promise<boolean> {
