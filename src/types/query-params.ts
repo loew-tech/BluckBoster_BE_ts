@@ -5,3 +5,7 @@ export interface GetMoviesByPageQueryParams {
 export interface GetMovieParams {
   id: string;
 }
+
+export interface GetMemberByUsernameBody {
+  username: string;
+}
